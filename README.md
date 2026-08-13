@@ -59,8 +59,8 @@ Commit and push changes to this file whenever the team roster changes.
 
 ## 5. Adjust the schedule (optional)
 
-By default the workflow runs at `06:00 UTC` daily. Edit the `cron` line and
-the `BIRTHDAY_TZ` env var in
+The workflow runs at `09:00 Asia/Yerevan` (`05:00 UTC`) daily. Edit the
+`cron` line and the `BIRTHDAY_TZ` env var in
 `.github/workflows/birthday-reminder.yml` to match your team's timezone —
 `BIRTHDAY_TZ` controls which "tomorrow" the script checks against (e.g.
 `Asia/Yerevan`, `America/New_York`), while the `cron` value (always UTC)
