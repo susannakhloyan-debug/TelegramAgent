@@ -1,0 +1,14 @@
+{
+  "name": "telegram-birthday-bot",
+  "version": "1.0.0",
+  "description": "Reminds a Telegram group about team members' birthdays on a daily schedule.",
+  "main": "src/checkBirthdays.js",
+  "type": "module",
+  "scripts": {
+    "check-birthdays": "node src/checkBirthdays.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "ISC"
+}
