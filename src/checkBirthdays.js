@@ -34,12 +34,20 @@ function loadBirthdays(filePath) {
   return JSON.parse(raw);
 }
 
+function joinWithAnd(items) {
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
 function buildMessage(people) {
   const mentions = people.map((p) => p.telegram || p.name);
-  const names = mentions.join(', ');
-  const emoji = people.length > 1 ? '🎉🎂' : '🎂';
-  const verb = people.length > 1 ? 'have birthdays' : 'has a birthday';
-  return `${emoji} Reminder: ${names} ${verb} tomorrow! ${emoji}`;
+  const names = joinWithAnd(mentions);
+
+  if (people.length === 1) {
+    return `Hi guys! 🎂 Tomorrow is ${names}'s birthday. Don't forget to make your colleague's day happy! 🎉`;
+  }
+  return `Hi guys! 🎂 Tomorrow is ${names}'s birthday. Don't forget to make your colleagues' day happy! 🎉`;
 }
 
 async function sendTelegramMessage(text) {
