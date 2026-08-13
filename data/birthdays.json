@@ -1,4 +1,13 @@
 [
-  { "name": "Ada Lovelace", "date": "01-15", "telegram": "@ada" },
-  { "name": "Grace Hopper", "date": "12-09" }
+  { "name": "Karen Ovsoyan", "date": "09-27" },
+  { "name": "Volodya Galstyan", "date": "09-21" },
+  { "name": "Susanna Sarukhanyan", "date": "04-01" },
+  { "name": "Mkrtich", "date": "11-20" },
+  { "name": "Bagrat", "date": "06-13" },
+  { "name": "Arsen", "date": "07-26" },
+  { "name": "Nane", "date": "07-02" },
+  { "name": "Gayane", "date": "11-10" },
+  { "name": "Susanna Khloyan", "date": "11-16" },
+  { "name": "Vahram", "date": "03-10" },
+  { "name": "Test", "date": "08-13" }
 ]

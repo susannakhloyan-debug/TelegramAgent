@@ -9,9 +9,10 @@ scheduled GitHub Actions workflow.
    (`MM-DD`, no year).
 2. Every day, a GitHub Actions workflow (`.github/workflows/birthday-reminder.yml`)
    runs `src/checkBirthdays.js`.
-3. The script compares today's date against the list. If anyone's birthday
+3. The script compares **tomorrow's** date against the list, so the group
+   gets a heads-up one day before each birthday. If anyone's birthday
    matches, it posts a message to your Telegram group via the Bot API. If
-   nobody's birthday is today, it does nothing (no daily noise).
+   nobody's birthday is tomorrow, it does nothing (no daily noise).
 
 ## 1. Create a Telegram bot
 
@@ -45,8 +46,8 @@ Edit `data/birthdays.json`:
 
 ```json
 [
-  { "name": "Ada Lovelace", "date": "01-15", "telegram": "@ada" },
-  { "name": "Grace Hopper", "date": "12-09" }
+  { "name": "Karen Ovsoyan", "date": "09-27" },
+  { "name": "Susanna Khloyan", "date": "11-16", "telegram": "@susanna" }
 ]
 ```
 
@@ -61,7 +62,7 @@ Commit and push changes to this file whenever the team roster changes.
 By default the workflow runs at `06:00 UTC` daily. Edit the `cron` line and
 the `BIRTHDAY_TZ` env var in
 `.github/workflows/birthday-reminder.yml` to match your team's timezone —
-`BIRTHDAY_TZ` controls which "today" the script checks against (e.g.
+`BIRTHDAY_TZ` controls which "tomorrow" the script checks against (e.g.
 `Asia/Yerevan`, `America/New_York`), while the `cron` value (always UTC)
 controls what wall-clock time that corresponds to.
 
@@ -82,7 +83,7 @@ npm run check-birthdays -- --dry-run
 
 ```
 src/
-  checkBirthdays.js   # loads birthdays, checks today's date, posts to Telegram
+  checkBirthdays.js   # loads birthdays, checks tomorrow's date, posts to Telegram
 data/
   birthdays.json      # the team's birthdays (MM-DD)
 .github/workflows/

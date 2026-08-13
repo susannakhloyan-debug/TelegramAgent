@@ -9,15 +9,24 @@ const BIRTHDAYS_PATH =
   process.env.BIRTHDAYS_FILE || path.join(__dirname, '../data/birthdays.json');
 const DRY_RUN = process.argv.includes('--dry-run');
 
-function todayMonthDay(timeZone) {
+function tomorrowMonthDay(timeZone) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone,
+    year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   }).formatToParts(new Date());
-  const month = parts.find((p) => p.type === 'month').value;
-  const day = parts.find((p) => p.type === 'day').value;
-  return `${month}-${day}`;
+  const year = Number(parts.find((p) => p.type === 'year').value);
+  const month = Number(parts.find((p) => p.type === 'month').value);
+  const day = Number(parts.find((p) => p.type === 'day').value);
+
+  // Anchor at UTC noon so adding a day can't slip into the wrong date
+  // due to DST or timezone offsets.
+  const todayUTC = new Date(Date.UTC(year, month - 1, day, 12));
+  const tomorrowUTC = new Date(todayUTC.getTime() + 24 * 60 * 60 * 1000);
+  const mm = String(tomorrowUTC.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(tomorrowUTC.getUTCDate()).padStart(2, '0');
+  return `${mm}-${dd}`;
 }
 
 function loadBirthdays(filePath) {
@@ -30,7 +39,7 @@ function buildMessage(people) {
   const names = mentions.join(', ');
   const emoji = people.length > 1 ? '🎉🎂' : '🎂';
   const verb = people.length > 1 ? 'have birthdays' : 'has a birthday';
-  return `${emoji} ${names} ${verb} today! Wishing you a great one! ${emoji}`;
+  return `${emoji} Reminder: ${names} ${verb} tomorrow! ${emoji}`;
 }
 
 async function sendTelegramMessage(text) {
@@ -55,15 +64,15 @@ async function sendTelegramMessage(text) {
 
 async function main() {
   const birthdays = loadBirthdays(BIRTHDAYS_PATH);
-  const today = todayMonthDay(TIMEZONE);
-  const todaysPeople = birthdays.filter((p) => p.date === today);
+  const tomorrow = tomorrowMonthDay(TIMEZONE);
+  const upcomingPeople = birthdays.filter((p) => p.date === tomorrow);
 
-  if (todaysPeople.length === 0) {
-    console.log(`No birthdays today (${today}).`);
+  if (upcomingPeople.length === 0) {
+    console.log(`No birthdays tomorrow (${tomorrow}).`);
     return;
   }
 
-  const message = buildMessage(todaysPeople);
+  const message = buildMessage(upcomingPeople);
   console.log(message);
 
   if (DRY_RUN) {
