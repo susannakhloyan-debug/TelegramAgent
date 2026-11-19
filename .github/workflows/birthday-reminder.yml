@@ -2,9 +2,14 @@ name: Birthday Reminder
 
 on:
   schedule:
-    # 09:00 Asia/Yerevan (UTC+4, no DST) = 05:00 UTC daily
-    - cron: '0 5 * * *'
+    # ~08:30 Asia/Yerevan (UTC+4, no DST) = 04:23 UTC daily.
+    # Off the top of the hour, because GitHub delays :00 schedules heavily.
+    - cron: '23 4 * * *'
   workflow_dispatch: {}
+
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   check-birthdays:
@@ -21,3 +26,12 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           BIRTHDAY_TZ: 'Asia/Yerevan'
+
+      # GitHub auto-disables scheduled workflows in repos with no commits for
+      # 60 days. Re-enabling the workflow through the API on every run resets
+      # that timer, so the bot keeps running without anyone pushing commits.
+      - name: Keep schedule alive
+        if: always()
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/birthday-reminder.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
