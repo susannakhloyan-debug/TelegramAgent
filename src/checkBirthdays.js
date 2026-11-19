@@ -61,7 +61,9 @@ async function sendTelegramMessage(text) {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' }),
+    // Plain text on purpose: Markdown mode rejects messages containing
+    // handles with underscores (e.g. @anna_m), which would fail the send.
+    body: JSON.stringify({ chat_id: chatId, text }),
   });
 
   if (!res.ok) {

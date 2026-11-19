@@ -59,7 +59,7 @@ Commit and push changes to this file whenever the team roster changes.
 
 ## 5. Adjust the schedule (optional)
 
-The workflow runs at `09:00 Asia/Yerevan` (`05:00 UTC`) daily. Edit the
+The workflow runs at about `08:30 Asia/Yerevan` (`04:23 UTC`) daily. It also re-enables itself on every run, so GitHub's 60-day inactivity rule never switches the schedule off. Edit the
 `cron` line and the `BIRTHDAY_TZ` env var in
 `.github/workflows/birthday-reminder.yml` to match your team's timezone —
 `BIRTHDAY_TZ` controls which "tomorrow" the script checks against (e.g.
